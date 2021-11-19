@@ -4,4 +4,4 @@ $DomainCredential = New-Object -TypeName System.Management.Automation.PSCredenti
 
 Add-Computer -ComputerName WEB01 -DomainName b3care.test -Credential $DomainCredential
 
-Restart-Computer -Confirm:$false
+Restart-Computer
