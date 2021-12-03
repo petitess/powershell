@@ -1,6 +1,6 @@
 ﻿# Static Values for Resource Group and Storage Account Names
-$resourceGroup = "B3CARE-NL-BAC"
-$storageAccountName = "b3carenlbackupstorage"
+$resourceGroup = "NL-BAC"
+$storageAccountName = "backupstorage"
 
 # Get a reference to the storage account and the context
 $storageAccount = Get-AzStorageAccount `
