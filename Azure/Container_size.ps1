@@ -1,8 +1,8 @@
 ﻿
-$context = New-AzStorageContext -StorageAccountName "b3carenlbackupstorage" -StorageAccountKey "glKWUDoaKGV/Dk6WjsVznz0RurYBmtuqoMfTQGRPJ0POUBriuLSU1rS1V2KeY3jJvg6deH8CSIMyDKac6cfvhw=="
+$context = New-AzStorageContext -StorageAccountName "backupstorage" -StorageAccountKey "Jvg6deH8CSIMyDKac6cfvhw=="
 #Container size
 
-$blobs = Get-AzStorageBlob -Container "b3care-se-db06" -Context $context -IncludeVersion 
+$blobs = Get-AzStorageBlob -Container "db06" -Context $context -IncludeVersion 
 #$blobs | select name, lastmodified, versionid, length
 $files = ($blobs | Measure-Object | %{$_.count})
 $containersize = ($blobs | Measure-Object -Sum Length).Sum / 1GB
