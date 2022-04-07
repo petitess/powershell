@@ -1,4 +1,4 @@
-$context = New-AzStorageContext -StorageAccountName "b3carenlbackupstorage" -StorageAccountKey "glKWUDoaKGV/Dk6WjsVznz0RurYBmtuqoMfTQGRPJ0POUBriuLSU1rS1V2KeY3jJvg6deH8CSIMyDKac6cfvhw=="
+$context = New-AzStorageContext -StorageAccountName "backupstorage" -StorageAccountKey "glKWUDoaKGV/Dk6WjMyDKac6cfvhw=="
 
 $containers = Get-AzStorageContainer -Context $context
 
