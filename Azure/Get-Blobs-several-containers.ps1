@@ -1,4 +1,4 @@
-#Gets blobs from multiple containers and send them to a file
+#Gets blobs from multiple containers and sends them to a file
 $context = New-AzStorageContext -StorageAccountName "backupstorage" -StorageAccountKey "glKWUDoaKGV/eY3jJvg6deH8CSIMyDKac6cfvhw=="
 $blob1 = Get-AzStorageBlob -Container "se-db01" -Context $context | Where-Object {$_.Name -like "*2022_04_07*"} | select Name, LastModified
 $blob2 = Get-AzStorageBlob -Container "se-db02" -Context $context | Where-Object {$_.Name -like "*2022_04_07*"} | select Name, LastModified
