@@ -9,7 +9,7 @@ $connectionResult = Connect-AzAccount `
 -CertificateThumbprint $connection.CertificateThumbprint
 "Login successful.."
 
-#Run you script
+#Run your script
 $RG = Get-AzResourceGroup -Name *
 Write-Output $RG | select ResourceGroupName
 $RG | Remove-AzResourceGroup -Force
