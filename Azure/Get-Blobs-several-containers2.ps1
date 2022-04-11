@@ -6,4 +6,4 @@ $blobs = Get-AzStorageBlob -Container $container.Name -Context $context | Where-
 $blobs 
 }
 
-$list | Out-File C:\Users\KarolSek\Desktop\lista2.txt -Append
+$list | Out-File C:\Users\KarolSek\Desktop\lista2_$(get-date -f yyyy-MM-dd).txt -Append
