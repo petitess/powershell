@@ -4,7 +4,6 @@ $containers = Get-AzStorageContainer -Context $context
 $list = foreach ($container in $containers) {
 $blobs = Get-AzStorageBlob -Container $container.Name -Context $context | Where-Object {$_.Name -like "*2022_04_07*"}
 $blobs 
-$blobs | Out-File "C:\Users\KarolSek\Desktop\$container.Name.txt"
 }
 
 $list | Out-File C:\Users\KarolSek\Desktop\lista2.txt -Append
