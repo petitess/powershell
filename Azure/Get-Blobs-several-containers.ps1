@@ -10,4 +10,4 @@ $blob7 = Get-AzStorageBlob -Container "se-db09" -Context $context | Where-Object
 $blob8 = Get-AzStorageBlob -Container "se-db12" -Context $context | Where-Object {$_.Name -like "*2022_04_07*"} | select Name, LastModified
 $blob9 = Get-AzStorageBlob -Container "se-db13" -Context $context | Where-Object {$_.Name -like "*2022_04_07*"} | select Name, LastModified
 
-$blob1,$blob2,$blob3,$blob4,$blob5,$blob5,$blob6,$blob7,$blob8,$blob9 | Out-File C:\Users\KarolSek\Desktop\lista.txt
+$blob1,$blob2,$blob3,$blob4,$blob5,$blob5,$blob6,$blob7,$blob8,$blob9 | Out-File C:\Users\KarolSek\Desktop\lista_$(get-date -f yyyy-MM-dd).txt
