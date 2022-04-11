@@ -1,5 +1,5 @@
 #
-$DatGete = [DateTime]::Now.AddDays(-100) 
+$Date = [DateTime]::Now.AddDays(-100) 
 Get-EventLog -LogName Application -After $Date | Where -FilterScript {$_.EventID -eq 11707}  
 
 #
