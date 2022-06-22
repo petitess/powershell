@@ -1,7 +1,6 @@
-﻿Import-Module ActiveDirectory
+Import-Module ActiveDirectory
 
 $securePassword = ConvertTo-SecureString "12345.abc" -AsPlainText -Force
-
 
 $users = Import-Csv -Path c:\2.csv -Encoding UTF7
 
