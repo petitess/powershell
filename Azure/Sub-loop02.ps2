@@ -1,0 +1,16 @@
+
+$subscripionList = Get-AzSubscription 
+
+ ForEach ($subscriptionId in $subscripionList) {
+    Set-AzContext -Subscription $subscriptionId
+
+    $resources = Get-AzResource | Where-Object {$_.Tags.Values -eq "dev"}
+
+     foreach ($resource in $resources) {
+
+        $Res = $resource | select name, ResourceGroupName, SubscriptionId
+        Write-Host $resource.Name $resource.ResourceGroupName $resource.SubscriptionId
+        $Res | Export-Csv C:\Users\Karol\Desktop\Resources.csv -Append -Encoding UTF8
+    }
+    
+}
