@@ -1,0 +1,119 @@
+<#
+.SYNOPSIS
+  Looping through selected Azure subscriptions template. Also can be used as example of VM inventory
+.DESCRIPTION
+  Template/building block for looping through Azure subscriptions. 
+  Can be used to perform certain operations in defined set of subscriptions. 
+  Can loop all subscriptions or defined set of them (comma separated list).
+  As an example makes inventory of all VMs with sizes, running statuses. resource groups
+.PARAMETER $tenantID_param
+    Tenant ID within which we looping subscriptons through
+.PARAMETER $subID_Param
+    "" means - loop through all subscriptions you have access to in the tennant specified
+    if comma separated list of subscription ID is specified - will traverse only these subscriptions
+    if just one subscription ID is specified - will use only this subscription 
+.PARAMETER $pathToSaveFiles
+    folder where to save csv files, by default (if not specified) will use same folder the script is run from
+.INPUTS
+  None
+.OUTPUTS
+  save sample VM data from looped subscription to this file. Name of the file is in 
+    <yyyyMMdd-HHmmss>_<tenantID>_VMs.csv
+  form.
+.NOTES
+  Version:        1.0
+  Author:         Aleksandr Reznik (aleksandr@reznik.lt)
+  Creation Date:  2021.09.05
+  Purpose/Change: template/building block for looping through subscriptions
+  
+.EXAMPLE
+  open powershell prompt. CD to dirctory where the script is saved.
+    .\azureSubscriptionLoop.ps1 -tenantID_Param  "tenant_ID_here" 
+    - this will iterate all subscriptions in tenant, as $subID_Param is not specified
+    .\azureSubscriptionLoop.ps1 -tenantID_Param  "tenant_ID_here" -subID_Param "sub1_ID,sub2_ID"
+    - will process only sub1_ID and sub2_ID subscription
+#>
+param(
+    [string]$tenantID_Param ,
+    [string]$subID_Param,# use "" for all subscriptions
+    [string]$pathToSaveFiles=$PSScriptRoot +"\" #by default equals to currently run script directory
+    )
+
+
+#*************************************  MAIN BODY   *************************************
+    $PSOobj4CSV = @() #will collect all VM data to this variable for later output to CSV
+    $CurrDateTimeStr=[DateTime]::Now.ToString("yyyyMMdd-HHmmss")
+    $pathToCSV = "$($pathToSaveFiles)$($CurrDateTimeStr)_$($tenantID_param)_VMs.csv"
+
+
+    $currentAZContext = Get-AzContext
+    if ($currentAZContext.Tenant.id -ne $tenantID_param){
+        write-host "This script is not authenticated to needed tenant. Runnng authentication"
+        Connect-AzAccount  -TenantId $tenantID_param
+    }
+    else{
+        write-host "This script is already authenticated to needed tenant - reusing authentication."
+    }
+    
+    $subs= @()
+    #filling $subs variable
+    if($subID_Param -eq "") { #empty string means all subscriptions linked to this tenant
+        $subs = Get-AzSubscription -TenantId $tenantID_param       #get all subscriptions to variable
+        }
+    else{
+        if ($subID_Param.IndexOf(',') -eq -1){ #if "," not present  - only one subscriprion is specified
+            $subs = Get-AzSubscription -TenantId $tenantID_param   -SubscriptionId $subID_Param
+        }
+        else{ #if several comma separated subscriptions in parameter
+            $subID_Param = $subID_Param -replace '\s',''  #removing empty spaces (if any)
+            $subsArray = $subID_Param  -split ","
+            foreach($subsArrayElement in $subsArray){
+                $currTempSub = Get-AzSubscription -TenantId $tenantID_param   -SubscriptionId $subsArrayElement
+                $subs += $currTempSub
+            }
+        }
+    }
+    foreach($currSub in $subs){
+        Set-AzContext -subscriptionId $currSub.id -Tenant $tenantID_param
+        if (! $?){
+            write-host "Error occured during Set-AzContext. Error message: $($error[0].Exception.InnerException.Message)"
+            write-host "trying to discconect and reconnect"
+            Disconnect-AzAccount
+            Connect-AzAccount  -TenantId $tenantID_param -SubscriptionId  $subscriptionID
+            Set-AzContext -subscriptionId $subscriptionID -Tenant $tenantID_param
+        }
+
+        $VMs = Get-AzVM
+        foreach($currVM in $VMs){
+            
+            #getting VM status (running, stopped etc..)
+            $vmStatus = $currVM | Get-AzVM -Status
+            $vmStatusTxt = ""
+            if($vmStatus){
+                if($vmStatus.Statuses[1]){
+                    $vmStatusTxt = $vmStatus.Statuses[1].DisplayStatus
+                    }
+                else{
+                    $vmStatusTxt = "NA"
+                    }
+                }
+            else{
+                $vmStatusTxt  = "NA"
+                }
+                        
+            write-host "Procesing $($currVM.name)"
+            $PSOline = [pscustomobject]@{
+                'VMname'            = $currVM.name
+                'Resource group'    = $currVM.ResourceGroupName
+                'VMsize'            = $currVM.HardwareProfile.VmSize
+                'VMstatus'          = $vmStatusTxt 
+                'SubscriptionName'  = $currSub.Name
+                'SubscriptionID'    = $currSub.Id
+
+            }
+            $PSOobj4CSV += $PSOline
+        }#end foreach VM
+        write-host
+    }#end foreach sub
+    $PSOobj4CSV|export-CSV  $pathToCSV -NoTypeInformation -append  -force
+    write-host "CSV file created at $($pathToCSV)"
