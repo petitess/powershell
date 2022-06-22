@@ -1,4 +1,4 @@
-﻿#Set-Location c:\dp
+#Set-Location c:\dp
 
 Set-Location 'C:\dp'
 
