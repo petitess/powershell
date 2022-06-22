@@ -1,9 +1,7 @@
 #!/usr/bin/env pwsh
 
 $SecretUser = "adminUsername"
-
 Connect-AzAccount -Identity
-
 $GetSecretUser = Get-AzKeyVaultSecret -VaultName $env:KeyVault -Name $SecretUser 
 
 if ($null -eq $GetSecretUser) {
