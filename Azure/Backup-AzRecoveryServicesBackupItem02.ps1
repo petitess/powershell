@@ -13,5 +13,5 @@ $backupcontainer = Get-AzRecoveryServicesBackupContainer `
 $item = Get-AzRecoveryServicesBackupItem `
     -Container $backupcontainer `
     -WorkloadType "AzureVM"
-Backup-AzRecoveryServicesBackupItem -Item $item
+Backup-AzRecoveryServicesBackupItem -Item $item -ExpiryDateTimeUTC (Get-Date).AddDays(30)
 }
