@@ -26,9 +26,9 @@ Publish-AzAutomationRunbook -Name $runname -ResourceGroupName $aa.ResourceGroupN
 
 if ($null -eq $sche) {
 if ($now -ge "19:55"){
-New-AzAutomationSchedule -Name $schename -AutomationAccountName $aa.AutomationAccountName -ResourceGroupName $aa.ResourceGroupName -StartTime $today -DayInterval 1 -TimeZone "Europe/Berlin"
-}else {
 New-AzAutomationSchedule -Name $schename -AutomationAccountName $aa.AutomationAccountName -ResourceGroupName $aa.ResourceGroupName -StartTime $tomorrow -DayInterval 1 -TimeZone "Europe/Berlin"
+}else {
+New-AzAutomationSchedule -Name $schename -AutomationAccountName $aa.AutomationAccountName -ResourceGroupName $aa.ResourceGroupName -StartTime $today -DayInterval 1 -TimeZone "Europe/Berlin"
 }
 }
 
