@@ -1,0 +1,2 @@
+$terms = Get-AzMarketplaceTerms -Publisher citrix -Product netscalervpx-131 -Name netscalerbyol
+Set-AzMarketplaceTerms -Publisher citrix -Product netscalervpx-131 -Name netscalerbyol -Terms $terms -Accept
