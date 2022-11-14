@@ -1,4 +1,5 @@
-﻿$CertLocation = 'C:\temp\VPN'
+#https://subhashvasarapu.medium.com/connect-azure-point-to-site-vpn-to-android-device-4200579e7acb
+$CertLocation = 'C:\temp\VPN'
 $Cert = 'AndroidClient.pfx'
 $CertName = "$CertLocation$Cert"
 
