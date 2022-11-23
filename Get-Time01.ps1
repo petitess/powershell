@@ -31,3 +31,10 @@ Get-Date $Temp -UFormat "%m/%d/%Y $time"
 $time = "20:30"
 Get-Date -UFormat "%m/%d/%Y $time"
 }
+
+###FILE USAGE
+New-Item -Path "C:\B3\Run$(Get-Date -Format 'yyyy-MM-dd')" -Force
+$temp = (Get-Date).AddDays(-1)
+if (Test-Path "C:\B3\Run$(Get-Date $Temp -Format 'yyyy-MM-dd')") {
+Remove-Item -Path "C:\B3\Run$(Get-Date $Temp -Format 'yyyy-MM-dd')"
+}
