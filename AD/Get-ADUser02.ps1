@@ -1,4 +1,6 @@
-﻿#PUT THIS FILE ON A MGMT SERVER
+#PUT THIS FILE ON A MGMT SERVER
+#WORKS WITH LOGIC APP
+##9223372036854775807 = password never expires
 
 #INSTALL MODLUES:
 #Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
