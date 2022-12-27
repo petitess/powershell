@@ -3,3 +3,7 @@
 ```powershell
 Start-ADSyncSyncCycle -PolicyType Initial
 ```
+##### Get All Groups for the current user is a member of
+```powershell
+(get-aduser $env:USERNAME -Properties memberof | select -expand memberof | get-adgroup) | select Name,groupscope | sort name
+```
