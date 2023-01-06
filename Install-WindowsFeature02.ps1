@@ -7,7 +7,7 @@ Get-WindowsFeature -Name RSAT-DHCP | Select-Object Name , InstallState
 Get-WindowsFeature -Name RSAT-DNS-Server | Select-Object Name , InstallState 
 Get-WindowsFeature -Name RSAT-ADCS | Select-Object Name , InstallState           
 
-Install-WindowsFeature -Name RSAT-AD-Tools      
-Install-WindowsFeature -Name RSAT-DHCP 
-Install-WindowsFeature -Name RSAT-DNS-Server     
-Install-WindowsFeature -Name RSAT-ADCS 
+Install-WindowsFeature -Name RSAT-AD-Tools -IncludeAllSubFeature   
+Install-WindowsFeature -Name RSAT-DHCP -IncludeAllSubFeature
+Install-WindowsFeature -Name RSAT-DNS-Server -IncludeAllSubFeature  
+Install-WindowsFeature -Name RSAT-ADCS -IncludeAllSubFeature         
