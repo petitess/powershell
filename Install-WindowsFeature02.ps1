@@ -1,4 +1,4 @@
-Install-WindowsFeature -IncludeAllSubFeature RSAT'
+Install-WindowsFeature -IncludeAllSubFeature RSAT
 
 Get-WindowsFeature | Where-Object {$_.Name -like 'RSAT*'} | select Name,DisplayName                               
      
