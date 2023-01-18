@@ -6,8 +6,10 @@ Where-Object {$_.AccountExpirationDate -lt (Get-Date) -and $_.enabled -eq $true 
 
 $Groups = Get-ADGroup -Filter * -SearchBase $GroupssOrganizationalUnit
 
+if ($null -ne $Users) {
 foreach ($Group in $Groups) {
 Remove-ADGroupMember -Identity $Group -Members $Users -Confirm:$false
+}
 }
 
 foreach ($User in $Users) {
