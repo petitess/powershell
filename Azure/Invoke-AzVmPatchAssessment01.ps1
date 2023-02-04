@@ -5,7 +5,7 @@ Invoke-AzVMInstallPatch  `
 -VMName vmmgmtprod01 `
 -Windows `
 -RebootSetting IfRequired `
--MaximumDuration PT2H `
+-MaximumDuration PT4H `
 -ClassificationToIncludeForWindows Definition, Critical, Security
 
 
@@ -14,5 +14,5 @@ Invoke-AzVMInstallPatch `
 -VMName vmmonprod01 `
 -Linux `
 -RebootSetting IfRequired `
--MaximumDuration PT3H `
+-MaximumDuration PT4H `
 -ClassificationToIncludeForLinux Critical, Security
