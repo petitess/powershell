@@ -11,7 +11,7 @@
 $ErrorActionPreference = "Stop"
 $password = ConvertTo-SecureString "xxxx" -AsPlainText -Force
 $creds = New-Object System.Management.Automation.PSCredential ("username", $password)
-$session = New-SFTPSession -Computername sftp.site.net -Port 2222 -Credential $creds -Verbose
+$session = New-SFTPSession -Computername sftp.site.net -Port 2222 -Credential $creds -Verbose -AcceptKey
 $source = "/"
 $items = Get-SFTPChildItem -Recursive $session -Path $source
 $localDestination = "D:\AVD"
