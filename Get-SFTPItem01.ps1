@@ -1,4 +1,4 @@
-﻿#Install module
+#Install module
 #install-module posh-ssh -Confirm:$false
 #Get-Command *sftp*
 
@@ -9,13 +9,13 @@
 #Removes folders older than 3 days
 
 $ErrorActionPreference = "Stop"
-$password = ConvertTo-SecureString "xxxxW3uxxx" -AsPlainText -Force
+$password = ConvertTo-SecureString "xxxx" -AsPlainText -Force
 $creds = New-Object System.Management.Automation.PSCredential ("username", $password)
 $session = New-SFTPSession -Computername sftp.site.net -Port 2222 -Credential $creds -Verbose
 $source = "/"
 $items = Get-SFTPChildItem -Recursive $session -Path $source
 $localDestination = "D:\AVD"
-$date = Get-Date -Format 'yyyy-MM-dd-HH'
+$date = Get-Date -Format 'yyyy-MM-dd-HH-mm'
 
 if (Test-Path -Path "$localDestination\Filer_$date") {
 Write-Output "Folder Filer_$date exists"
@@ -27,12 +27,12 @@ foreach ($item in $items) {
 Get-SFTPItem -SessionId $session.SessionID -Path $item.FullName -Destination "$localDestination\Filer_$date" -Force
 }
 
-$latestFolder = Get-ChildItem -Path $localDestination -Directory | select -last 1
+$latestFolder = Get-ChildItem -Path $localDestination -Directory | Sort-Object -Descending -Property LastWriteTime | select -First 1
 $lastestFiles = Get-ChildItem -Path $localDestination\$latestFolder
 
 foreach ($file in $lastestFiles) {
 
-if($file.Length -eq (Get-ChildItem -Path $localDestination | where {$_.Name -eq $file}).Length) {
+if($file.Length -eq (Get-ChildItem -Path $localDestination | where {$_.Name -eq $file.Name}).Length) {
 Write-Output "The same size: $file"}
 
 else{
