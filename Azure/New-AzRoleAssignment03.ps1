@@ -2,11 +2,11 @@ $Roles = @(
     'Reader' 
     'Contributor' 
     'Owner' ) 
-    
-$Scope = (Get-AzSubscription -SubscriptionName $env:SubName).Id 
+$SubName = ""    
+$Scope = (Get-AzSubscription -SubscriptionName $SubName).Id 
 
 foreach ($Role in $Roles) { 
-    $GroupName = "grp-rbac-$env:SubName-$Role" 
+    $GroupName = "grp-rbac-$SubName-$Role" 
     if (!(Get-AzADGroup -DisplayName $GroupName)) { 
         $Group = New-AzADGroup -DisplayName $GroupName -MailNickname $GroupName 
         Write-Output "Group created: $GroupName" 
@@ -14,3 +14,4 @@ foreach ($Role in $Roles) {
         New-AzRoleAssignment -Scope "/subscriptions/$Scope" -ObjectId $Group.Id -RoleDefinitionName $Role 
     } 
 }
+
