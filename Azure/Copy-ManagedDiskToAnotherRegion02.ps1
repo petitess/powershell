@@ -20,4 +20,4 @@ $DestStorageContext = New-AzStorageContext –StorageAccountName $storageaccount
 
 Write-Output "START COPY"
 Start-AzStorageBlobCopy -AbsoluteUri $snapshotaccess.AccessSAS -DestContainer $StorageAccountBlob -DestContext $DestStorageContext -DestBlob "$($vhdname).vhd" -Force -ErrorAction stop
-Write-Output "END COPY"
+Write-Output "END COPY, CREATE A NEW DISK MANUALLY IN THE PORTAL FROM STORAGE BLOB"
