@@ -1,4 +1,3 @@
-
 $billingAccounts = 'xxxxx-3b42-53ba-e814-421e30e28525:1346c60a-08c0-4567-a607-xxxxxxxxxx'
 $billingProfile = 'xxxx-Y3PM-BG7-xxx'
 $invoiceSections = 'xxxx-TWIN-PJA-xxx'
