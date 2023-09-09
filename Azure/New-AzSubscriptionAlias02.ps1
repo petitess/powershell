@@ -30,6 +30,10 @@ foreach ($sub in $names) {
     # Query the Application ID of the Service Principal and Store it in a variable:-
     $spiID = az ad sp list --display-name $spiname --query [].appId -o tsv
     
+    # Store the Service Principal Application ID and Secret in Key Vault:-
+     az keyvault secret set --name $spiname-id --vault-name $kv --value $spiID
+     az keyvault secret set --name $spiname-passwd --vault-name $kv --value $spipasswd
+    
     # Assign the Service Principal, "Contributor" RBAC on Subscription Level:-
     az role assignment create --assignee "$spiID" --role "$rbac" --scope "/subscriptions/$newSub"
     
