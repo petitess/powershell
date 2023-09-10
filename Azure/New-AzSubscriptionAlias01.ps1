@@ -1,4 +1,4 @@
-#Permissiions
+#Permissions
 #Key Vault Admin (if you want to save secrets)
 #Owner at tenant scope
 #Application Admin
