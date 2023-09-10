@@ -1,3 +1,8 @@
+#Permissiions
+#Key Vault Admin (if you want to save secrets)
+#Owner at tenant scope
+#Application Admin
+#Billing account contributor (in Billing subscriptions)
 
 $billingAccounts = 'xxxxxx-53ba-e814-421e30e28525:1346c60a-08c0-4567-a607-xxxxx'
 $billingProfile = 'xxxx-Y3PM-BG7-xxx'
