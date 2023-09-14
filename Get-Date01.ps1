@@ -11,6 +11,9 @@ Get-Date -UFormat "%m/%d/%Y %R"
 $Temp = (Get-date).AddDays(1)
 Get-Date $Temp -UFormat "%m/%d/%Y %R"
 
+$Temp = (Get-date).AddDays(-1)
+Get-Date $Temp -Format "yyyyMMdd"
+
 $time = "20:30"
 $Temp = (Get-date).AddDays(1)
 $x = Get-Date $Temp -UFormat "%m/%d/%Y $time"
