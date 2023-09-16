@@ -13,5 +13,6 @@ $blobs = Get-AzStorageBlob -Container $containers.Name -Context $storage_account
 
 $blobs | ForEach-Object {
     $config = New-AzDiskConfig -Location "westeurope" -SkuName Premium_LRS -DiskSizeGB ($_ | ForEach-Object { [math]::truncate($_.Length / 1GB) }) -OsType Windows -HyperVGeneration V1 -Architecture X64 -CreateOption Import -SourceUri ($vhdUri + $_.Name) -StorageAccountId $st.Id
-    New-AzDisk -ResourceGroupName "rg-recovereddisks01" -DiskName $_.Name -Disk $config
+    New-AzDisk -ResourceGroupName "rg-recovereddisks01" -DiskName ($_.Name).Replace('.vhd', '') -Disk $config
+    Write-Output "Created: $(($_.Name).Replace('.vhd', ''))"
 }
