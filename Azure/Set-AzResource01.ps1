@@ -1,5 +1,6 @@
 $ApiNames = (Get-AzApplicationInsightsWebTest).Name
-$Status = "True" #"False"
+$Status = "False" #"True"
+$ResourceGroupName = 'rg-appi-prod-01'
 
 $allWebtests = Get-AzResource -ResourceGroupName $ResourceGroupName `
 | Where-Object -Property ResourceType -EQ "microsoft.insights/webtests"
@@ -10,4 +11,5 @@ ForEach ($ApiName in $ApiNames) {
     $enabled = Get-AzResource -ResourceId $alertId
     $enabled.Properties.Enabled = $Status
     $enabled | Set-AzResource -Force
+    Write-Output "Disabled: $ApiName"
 }
