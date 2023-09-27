@@ -1,10 +1,17 @@
-$TagKey = "AutoShutdown"
-$TagValues = "GroupA"
+$VMsize = 'Standard_D8ads_v5'
+$TagKey = "Restart"
+$TagValues = "GroupA" 
 
-$VMs = Get-AzVM -Status | Where-Object { $_.Tags.Keys -eq $TagKey -and $_.Tags.Values -eq $TagValues -and $_.PowerState -eq "VM deallocated" }
+$VMs = Get-AzVM -Status | Where-Object { $_.Tags.Keys -eq $TagKey -and $_.Tags.Values -eq $TagValues -and $_.Name -match "vmvda" }
 
 $VMs | ForEach-Object {
-        $_.HardwareProfile.VmSize = 'Standard_D8ads_v5'
-        Update-AzVM -VM $_ -ResourceGroupName $_.ResourceGroupName
-        Write-Output "Updated size: $($_.Name)"
+        if ($_.PowerState -eq "VM running" ) {
+                $_.HardwareProfile.VmSize = $VMsize
+                Update-AzVM -VM $_ -ResourceGroupName $_.ResourceGroupName
+                Write-Output "Updated size: $($_.Name)"
+        }if ($_.PowerState -eq "VM deallocated" ) {
+                $_.HardwareProfile.VmSize = $VMsize
+                Update-AzVM -VM $_ -ResourceGroupName $_.ResourceGroupName
+                Write-Output "Updated size: $($_.Name)"
+        }
 }
