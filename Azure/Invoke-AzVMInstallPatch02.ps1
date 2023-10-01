@@ -1,8 +1,3 @@
-$subscriptions = @(
-    'InfrastructureLegacy'
-    'sub-infra-prod-01'
-)
-
 #Disable alerts
 Set-AzContext -Subscription 'InfrastructureLegacy'
 $RG = "rg-alert-b3-guld-log"
@@ -15,6 +10,11 @@ $gold | ForEach-Object {
 }
 
 #Patch VMs
+$subscriptions = @(
+    'InfrastructureLegacy'
+    'sub-infra-prod-01'
+)
+
 $subscriptions | ForEach-Object {
     Set-AzContext -Subscription $_
     $TagKey = "UpdateManagement"
@@ -36,7 +36,9 @@ $subscriptions | ForEach-Object {
 Set-AzContext -Subscription 'InfrastructureLegacy'
 $RG = "rg-alert-b3-guld-log"
 $gold = Get-AzScheduledQueryRule -ResourceGroupName $RG | Select-Object Name, Enabled, Id
+if(!$gold.Properties.Enabled) {
 $gold | ForEach-Object {
     Update-AzScheduledQueryRule -Name $_.Name  -ResourceGroupName $RG -Enabled
     Write-Output "Enabled: $($_.Name)"
+}
 }
