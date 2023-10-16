@@ -8,9 +8,9 @@ $I = Invoke-AzVMRunCommand -ResourceGroupName $lastVm.ResourceGroupName -Name $l
 $output = $I.Value[0].Message
 
 if ([int]$output -lt 14) {
-    Write-Output "$output users. Less than 14 users on the system"
+    Write-Output "$output users. Less than 14 users on $($lastVm.Name)"
 }else {
-    Write-Output "$output users. More than 14 users on the system"
+    Write-Output "$output users. More than 14 users on $($lastVm.Name)"
     $VMs = Get-AzVM -Status | Where-Object { $_.Tags.Keys -eq $TagKey -and $_.Name -match "vmvdaprod" -and $_.PowerState -eq "VM deallocated" }
     $firstVm = $VMs | Select-Object -First 1
     Write-Output "$($firstVm.Name) starting"
