@@ -6,5 +6,5 @@ $database | ForEach-Object {
     $fileName = $_ + "_" + $date+".bak"
     $server = 'vmsqlprod01'
     $backupFile = $container + '/' + $fileName
-    Backup-SqlDatabase -ServerInstance $server -Database $_ -BackupFile $backupFile
+    Backup-SqlDatabase -ServerInstance $server -Database $_ -BackupFile $backupFile -CompressionOption On
 }
