@@ -1,5 +1,5 @@
 Connect-AzAccount
-Set-AzContext "sub-b3care-test-01"
+Set-AzContext "sub-xxx-test-01"
 Get-AzContext
 
 $Temp = (Get-date).AddDays(-30)
