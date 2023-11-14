@@ -8,4 +8,5 @@ $date
 $deploy = Get-AzDeployment | Where-Object { $_.Timestamp -lt $date }
 $deploy | ForEach-Object {
     Remove-AzDeployment -Name $_.DeploymentName
+    Write-Output $_.DeploymentName
 }
