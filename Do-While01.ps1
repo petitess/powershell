@@ -17,3 +17,10 @@ Write-Output "Working $i"
 Start-Sleep 3
 $i++
 }while (!(Test-Path "D:\XXX\*"))
+#######
+Do {
+    Write-Host "Online"
+    Start-Sleep 5
+}
+While (Test-Connection -ComputerName 8.8.8.8 -Quiet -Count 1)
+Write-Host "Offline"
