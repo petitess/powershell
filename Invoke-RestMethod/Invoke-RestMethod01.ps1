@@ -39,5 +39,17 @@ $bodyNewRessourceGroup = @"
 "@
 
 Invoke-RestMethod -Method PATCH -URI $URL -body $bodyNewRessourceGroup -Headers $headers
+###GET
+$subscriptionId = (Get-AzSubscription -SubscriptionName "sub-default-01").Id
+$RessourceGroupName = "rg-xxx"
+$Location = "swedencentral"
+$apiversion="2022-09-01"
+$URL = "https://management.azure.com/subscriptions/$subscriptionId/resourceGroups/$($RessourceGroupName)?api-version=$apiversion"
 
+$headers = @{
+    "Authorization" = "Bearer $((Get-AzAccessToken).Token)"
+    "Content-type"  = "application/json"
+  }
+
+Invoke-RestMethod -Method GET -URI $URL -Headers $headers
 
