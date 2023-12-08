@@ -11,3 +11,15 @@ $Ar = New-Object System.Security.AccessControl.FileSystemAccessRule("AzureAD\mat
 
 $Acl.SetAccessRule($Ar)
 Set-Acl "Z:" $Acl
+#English
+$Path = "D:\XXX"
+$Acl = Get-Acl $Path
+$Ar = New-Object System.Security.AccessControl.FileSystemAccessRule("everyone", "FullControl", "ContainerInherit,ObjectInherit", "None", "Allow")
+$Acl.SetAccessRule($Ar)
+Set-Acl $Path $Acl
+#Swedish
+$Path = "D:\XXX"
+$Acl = Get-Acl "D:\XXX"
+$Ar = New-Object System.Security.AccessControl.FileSystemAccessRule("alla", "FullControl", "ContainerInherit,ObjectInherit", "None", "Allow")
+$Acl.SetAccessRule($Ar)
+Set-Acl $Path $Acl
