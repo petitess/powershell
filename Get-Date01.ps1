@@ -41,3 +41,7 @@ $temp = (Get-Date).AddDays(-1)
 if (Test-Path "C:\B3\Run$(Get-Date $Temp -Format 'yyyy-MM-dd')") {
 Remove-Item -Path "C:\B3\Run$(Get-Date $Temp -Format 'yyyy-MM-dd')"
 }
+
+Get-TimeZone -ListAvailable | Where-Object {$_.Id -match "European"}
+
+$Time = (((Get-Date) -gt ($Date+" 20:50")) ? ($Tomorrow +" 21:00") : ($Date+" 21:00"))
