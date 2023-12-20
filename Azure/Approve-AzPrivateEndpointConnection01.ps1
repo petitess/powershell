@@ -18,6 +18,6 @@ $StId + $AppId | ForEach-Object {
     $Name = (Get-AzPrivateEndpointConnection -ResourceId $PepId[0].Id).Name
     Write-Output $($Status + ": " + $Name)
     } else {
-        Write-Output "Nothing to approve"
+        Write-Output "Nothing to approve $($Name)"
     }
 }
