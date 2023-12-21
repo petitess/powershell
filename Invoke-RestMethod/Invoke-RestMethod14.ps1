@@ -1,11 +1,11 @@
 ###List groups
-$APID = 'XXXXX'
+$ApiKey = 'XXX'
+$ApiKeyUserId = 'a8105'
 $Domain = 'b3it.se'
-$UserId = 'a8105'
 $Group = 'Beredskap'
-$URL = "https://bc.dstny.se/api/user/acd-attendant-group/v1/$Domain/$UserId"
+$URL = "https://bc.dstny.se/api/user/acd-attendant-group/v1/$Domain/$ApiKeyUserId"
 $headers = @{
-    "Authorization" = "Bearer $APID"
+    "Authorization" = "Bearer $ApiKey"
     "Content-type"  = "application/json"
     "Accept"  = "application/json"
   }
@@ -14,28 +14,29 @@ Invoke-RestMethod -Method GET -URI $URL -Headers $headers
 (Invoke-RestMethod -Method GET -URI $URL -Headers $headers).groups.agents
 
 ###Get group
-$APID = 'XXXXX'
+$ApiKey = 'XXX'
+$ApiKeyUserId = 'a8105'
 $Domain = 'b3it.se'
-$UserId = 'a8105'
 $Group = '82441'
-$URL = "https://bc.dstny.se/api/user/acd-attendant-group/v1/$Domain/$UserId/$Group/$Domain"
+$URL = "https://bc.dstny.se/api/user/acd-attendant-group/v1/$Domain/$ApiKeyUserId/$Group/$Domain"
 $headers = @{
-    "Authorization" = "Bearer $APID"
+    "Authorization" = "Bearer $ApiKey"
     "Content-type"  = "application/json"
     "Accept"  = "application/json"
   }
 Invoke-RestMethod -Method GET -URI $URL -Headers $headers
 
 ###Log in/Log out
-$APID = 'XXXXX'
+$ApiKey = 'XXX'
+$ApiKeyUserId = 'a8105'
 $Domain = 'b3it.se'
-$UserId = 'a8105'
 $Group = '82441'
 $GroupDomain = 'b3it.se'
 $Agent = 'a8105@b3it.se'
-$URL = "https://bc.dstny.se/api/user/acd-attendant-group/$Domain/$UserId/$Group/$GroupDomain/agents/$($Agent)?action=login"
+$URL = "https://bc.dstny.se/api/user/acd-attendant-group/$Domain/$ApiKeyUserId/$Group/$GroupDomain/agents/$($Agent)?action=logout"
 $headers = @{
-    "Authorization" = "Bearer $APID"
+    "Authorization" = "Bearer $ApiKey"
     "Content-type"  = "application/json"
+    "Accept"  = "application/json"
   }
 Invoke-RestMethod -Method POST -URI $URL -Headers $headers
