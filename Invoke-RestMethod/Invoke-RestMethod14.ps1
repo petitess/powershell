@@ -2,7 +2,6 @@
 $ApiKey = 'XXX'
 $ApiKeyUserId = 'a8105'
 $Domain = 'b3it.se'
-$Group = 'Beredskap'
 $URL = "https://bc.dstny.se/api/user/acd-attendant-group/v1/$Domain/$ApiKeyUserId"
 $headers = @{
     "Authorization" = "Bearer $ApiKey"
