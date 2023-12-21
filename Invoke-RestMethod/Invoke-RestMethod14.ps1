@@ -1,7 +1,7 @@
 ###List groups
 $ApiKey = 'XXX'
 $ApiKeyUserId = 'a8105'
-$Domain = 'b3it.se'
+$Domain = 'xxx.se'
 $URL = "https://bc.dstny.se/api/user/acd-attendant-group/v1/$Domain/$ApiKeyUserId"
 $headers = @{
     "Authorization" = "Bearer $ApiKey"
@@ -15,7 +15,7 @@ Invoke-RestMethod -Method GET -URI $URL -Headers $headers
 ###Get group
 $ApiKey = 'XXX'
 $ApiKeyUserId = 'a8105'
-$Domain = 'b3it.se'
+$Domain = 'xxx.se'
 $Group = '82441'
 $URL = "https://bc.dstny.se/api/user/acd-attendant-group/v1/$Domain/$ApiKeyUserId/$Group/$Domain"
 $headers = @{
@@ -28,10 +28,10 @@ Invoke-RestMethod -Method GET -URI $URL -Headers $headers
 ###Log in/Log out
 $ApiKey = 'XXX'
 $ApiKeyUserId = 'a8105'
-$Domain = 'b3it.se'
+$Domain = 'xxx.se'
 $Group = '82441'
-$GroupDomain = 'b3it.se'
-$Agent = 'a8105@b3it.se'
+$GroupDomain = 'xxx.se'
+$Agent = 'a8105@xx.se'
 $URL = "https://bc.dstny.se/api/user/acd-attendant-group/$Domain/$ApiKeyUserId/$Group/$GroupDomain/agents/$($Agent)?action=logout"
 $headers = @{
     "Authorization" = "Bearer $ApiKey"
