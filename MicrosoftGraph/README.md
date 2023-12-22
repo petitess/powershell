@@ -39,4 +39,8 @@ Get-MgRoleManagementDirectoryRoleEligibilityScheduleInstance -All -Filter "princ
 Get-MgRoleManagementDirectoryRoleAssignmentScheduleRequest -All -Filter "principalId eq '$($user.Id)'" | Format-List
 #Get PIM groups
 Get-MgGroup -All | Where-Object {$_.isAssignableToRole -like "True"} | Select-Object DisplayName,Id
+
+Get-MgIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest | ConvertTo-Json
+
+(Get-Command get-mg*Privileged*group*).Name
 ```
