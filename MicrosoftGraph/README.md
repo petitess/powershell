@@ -10,7 +10,7 @@ Get-InstalledModule Microsoft.Graph
 ```pwsh
 Connect-MgGraph -TenantId "xxx" -Scopes 'User.Read.All'
 
-Connect-MgGraph -Scopes "User.Read.All","MailboxSettings.Read"
+Connect-MgGraph -Scopes "User.Read.All","MailboxSettings.Read","PrivilegedEligibilitySchedule.ReadWrite.AzureADGroup","PrivilegedAccess.ReadWrite.AzureADGroup"
 
 Get-MgContext
 
