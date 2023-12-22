@@ -18,3 +18,7 @@ Get-MgUser -All
 
 Disconnect-MgGraph
 ```
+#### Get access token
+```pwsh
+$accessToken = (az account get-access-token --resource-type ms-graph | ConvertFrom-Json).accessToken
+```
