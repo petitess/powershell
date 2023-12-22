@@ -15,4 +15,6 @@ Connect-MgGraph -Scopes "User.Read.All","MailboxSettings.Read"
 Get-MgContext
 
 Get-MgUser -All
+
+Disconnect-MgGraph
 ```
