@@ -8,7 +8,12 @@ $X = @(
     [pscustomobject]@{Symbol = 'INTC'; CompanyName = 'Intel Corporation';  Purchase = 30; LastDiv = 0.5; Industry = 'Technology'; MarketCap = 212000424000}
     [pscustomobject]@{Symbol = 'NIO'; CompanyName = 'Nio Inc';  Purchase = 10; LastDiv = 0; Industry = 'Steel'; MarketCap = 16000452000}
     [pscustomobject]@{Symbol = 'MMM'; CompanyName = '3M Company';  Purchase = 100; LastDiv = 6; Industry = 'Consumer goods'; MarketCap = 60452000532}
-    [pscustomobject]@{Symbol = 'BA'; CompanyName = 'Boeing Co';  Purchase = 200; LastDiv = 0; Industry = 'Transportation'; MarketCap = 0}
+    [pscustomobject]@{Symbol = 'BA'; CompanyName = 'Boeing Co';  Purchase = 200; LastDiv = 0; Industry = 'Transportation'; MarketCap = 120452000532}
+    [pscustomobject]@{Symbol = 'AXP'; CompanyName = 'American Express Company';  Purchase = 150; LastDiv = 2; Industry = 'Banking'; MarketCap = 135452000532}
+    [pscustomobject]@{Symbol = 'AAPL'; CompanyName = 'Apple Inc';  Purchase = 160; LastDiv = 0; Industry = 'Technology'; MarketCap = 3135452000532}
+    [pscustomobject]@{Symbol = 'CSCO'; CompanyName = 'Cisco Systems Inc';  Purchase = 50; LastDiv = 1; Industry = 'Technology'; MarketCap = 220452000532}
+    [pscustomobject]@{Symbol = 'MCD'; CompanyName = 'McDonalds Corporation';  Purchase = 200; LastDiv = 6; Industry = 'Food'; MarketCap = 220332000532}
+    [pscustomobject]@{Symbol = 'JNJ'; CompanyName = 'Johnson & Johnson';  Purchase = 100; LastDiv = 4; Industry = 'Medical technologies'; MarketCap = 320452000532}
 )
 
 $X | Where-Object {
