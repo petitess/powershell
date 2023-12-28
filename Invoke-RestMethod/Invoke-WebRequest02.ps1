@@ -37,10 +37,15 @@ $headers = @{
 $DstnyUsers = (Invoke-RestMethod -Method GET -URI $URL -Headers $headers).groups.agents.id
 
 #Logout all users
-$DstnyUsers | ForEach-Object {
-    $URL = "https://bc.dstny.se/api/user/acd-attendant-group/$Domain/$ApiKeyUserId/$Group/$Domain/agents/$($_)?action=logout"
-    Invoke-RestMethod -Method POST -URI $URL -Headers $headers
-    Write-Output $($_ + " utloggad från dsnty")
+if ($Day -eq 'Thursday' -and $Time -lt "07:00") {
+    Write-Output "Kör inte scriptet"
+}
+else {
+    $DstnyUsers | ForEach-Object {
+        $URL = "https://bc.dstny.se/api/user/acd-attendant-group/$Domain/$ApiKeyUserId/$Group/$Domain/agents/$($_)?action=logout"
+        Invoke-RestMethod -Method POST -URI $URL -Headers $headers
+        Write-Output $($_ + " utloggad från dsnty")
+    }
 }
 
 switch ($NextOnCall) {
