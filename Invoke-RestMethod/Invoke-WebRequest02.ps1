@@ -1,14 +1,23 @@
+$Day = (Get-Date).DayOfWeek
+$Time = Get-Date -Format "HH:mm"
+Write-Output $($Day.ToString() + " " + $Time.ToString())
+
 ###Opsgenie info
-$ApiOpsgenie = Get-AzKeyVaultSecret -VaultName "kv-xxx-prod-01" -Name "ApiKeyOpsgenie" -AsPlainText
+$ApiOpsgenie = Get-AzKeyVaultSecret -VaultName "kv-b3-aa-prod-01" -Name "ApiKeyOpsgenie" -AsPlainText
 $ScheduleName = 'Beredskap_schedule'
-$UrlOpsgenie = "https://api.opsgenie.com/v2/schedules/$ScheduleName/next-on-calls?scheduleIdentifierType=name"
 
 $HeadersOpsgenie = @{
     "Authorization" = "GenieKey $ApiOpsgenie"
     "Content-type"  = "application/json"
 }
-
+if($Day -eq 'Thursday' -and $Time -lt "08:00") {
+$UrlOpsgenie = "https://api.opsgenie.com/v2/schedules/$ScheduleName/on-calls?scheduleIdentifierType=name"
+$NextOnCall = (Invoke-RestMethod -Method GET -URI $UrlOpsgenie -Headers $HeadersOpsgenie).data.onCallParticipants.name
+}else {
+$UrlOpsgenie = "https://api.opsgenie.com/v2/schedules/$ScheduleName/next-on-calls?scheduleIdentifierType=name"
 $NextOnCall = (Invoke-RestMethod -Method GET -URI $UrlOpsgenie -Headers $HeadersOpsgenie).data.exactNextOnCallRecipients.name
+}
+
 Write-Output $($NextOnCall + " har beredskap")
 
 ###Info dstny.se
