@@ -12,7 +12,7 @@ $HeadersOpsgenie = @{
     "Content-type"  = "application/json"
 }
 
-if ($Day -eq 'Thursday' -and $Time -lt "07:00") {
+if ($Day -eq 'Thursday' -and $Time -lt "07:00" -or $Day -eq 'Wednesday' -and $Time -gt "15:00") {
     Write-Output "Kör inte scriptet"
 }
 else {
@@ -37,7 +37,7 @@ $headers = @{
 $DstnyUsers = (Invoke-RestMethod -Method GET -URI $URL -Headers $headers).groups.agents.id
 
 #Logout all users
-if ($Day -eq 'Thursday' -and $Time -lt "07:00") {
+if ($Day -eq 'Thursday' -and $Time -lt "07:00" -or $Day -eq 'Wednesday' -and $Time -gt "15:00") {
     Write-Output "Kör inte scriptet"
 }
 else {
