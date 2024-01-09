@@ -23,3 +23,15 @@ $PassToken = $String2Encode64 + "." + $String4Encode64
 
 #With this token you can call Token API to renew API keys
 #https://www.dstny.se/app/uploads/User-API-v-5.5.22336..html#tag/Tickets
+
+###API call
+$ApiKeyUserId = 'x1111'#Karol
+$AlloweApis = "api=CONTACT&api=CALLS&api=USER&api=CDR_READER&api=COMMUNICATION_LOG&api=DISTRIBUTION_GROUP&api=PERSONAL_CONTACTS&api=QUEUE_STATS"
+$Domain = 'xxx.se'
+$headers = @{
+    "Accept"   = "application/json"
+}
+
+(Invoke-RestMethod -Method POST `
+-URI "https://bc.dstny.se/api/tickets/$Domain/$($ApiKeyUserId)?platform=other&$AlloweApis&name=token_token&t=$PassToken" `
+-Headers $headers)
