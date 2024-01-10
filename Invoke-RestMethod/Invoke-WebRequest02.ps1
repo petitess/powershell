@@ -1,88 +1,75 @@
 Connect-AzAccount -Identity
 
-$Day = (Get-Date).DayOfWeek
-$Time = Get-Date -Format "HH:mm"
-Write-Output $($Day.ToString() + " " + $Time.ToString())
-
 ###Opsgenie info
-$ApiOpsgenie = Get-AzKeyVaultSecret -VaultName "kv-xxx-aa-prod-01" -Name "ApiKeyOpsgenie" -AsPlainText
+$ApiOpsgenie = $Env:API_KEY_OPSGENIE
 $ScheduleName = 'Beredskap_schedule'
 $HeadersOpsgenie = @{
     "Authorization" = "GenieKey $ApiOpsgenie"
     "Content-type"  = "application/json"
 }
 
-if ($Day -eq 'Thursday' -and $Time -lt "07:00" -or $Day -eq 'Wednesday' -and $Time -gt "15:00") {
-    Write-Output "Kör inte scriptet"
+$UrlOpsgenie = "https://api.opsgenie.com/v2/schedules/$ScheduleName/on-calls?scheduleIdentifierType=name&flat=true&flat=true&flat=true&flat=true"
+try {
+    $OnCallUsers = (Invoke-RestMethod -Method GET -URI $UrlOpsgenie -Headers $HeadersOpsgenie).data.onCallRecipients
 }
-else {
-    $UrlOpsgenie = "https://api.opsgenie.com/v2/schedules/$ScheduleName/next-on-calls?scheduleIdentifierType=name"
-    $NextOnCall = (Invoke-RestMethod -Method GET -URI $UrlOpsgenie -Headers $HeadersOpsgenie).data.exactNextOnCallRecipients.name
-    Write-Output $($NextOnCall + " har beredskap")
+catch {
+    throw "{0} {1}" -f $_.Exception.Response.StatusCode.value__, $_.Exception.Response.ReasonPhrase
+}
+$OnCallUsers | ForEach-Object {
+    Write-Output $($_ + " har beredskap")
 }
 
 ###Info dstny.se
-$ApiKey = Get-AzKeyVaultSecret -VaultName "kv-xxx-aa-prod-01" -Name "ApiKeyDstny" -AsPlainText
-$ApiKeyUserId = 'x105'#Karol
-$Domain = 'xxxit.se'
-$Group = '82441'
-$URL = "https://bc.dstny.se/api/user/acd-attendant-group/v1/$Domain/$ApiKeyUserId"
+$ApiKey = $Env:API_KEY_DSTNY
+$ApiKeyUserId = 'a1111'
+$Domain = 'xxx.se'
+$Group = '11111'
 $headers = @{
     "Authorization" = "Bearer $ApiKey"
     "Content-type"  = "application/json"
     "Accept"        = "application/json"
 }
+try {
+    $Contacts = Invoke-RestMethod -Method GET -URI "https://bc.dstny.se/api/contacts/list/$Domain/$ApiKeyUserId" -Headers $headers
+}
+catch {
+    throw "{0} {1}" -f $_.Exception.Response.StatusCode.value__, $_.Exception.Response.ReasonPhrase
+}
 
 #Get all users for ADC-group
-$DstnyUsers = (Invoke-RestMethod -Method GET -URI $URL -Headers $headers).groups.agents.id
+try {
+    $DstnyUsers = (Invoke-RestMethod -Method GET -URI "https://bc.dstny.se/api/user/acd-attendant-group/v1/$Domain/$ApiKeyUserId" -Headers $headers).groups.agents.id
+}
+catch {
+    throw "{0} {1}" -f $_.Exception.Response.StatusCode.value__, $_.Exception.Response.ReasonPhrase
+}
 
 #Logout all users
-if ($Day -eq 'Thursday' -and $Time -lt "07:00" -or $Day -eq 'Wednesday' -and $Time -gt "15:00") {
-    Write-Output "Kör inte scriptet"
-}
-else {
-    $DstnyUsers | ForEach-Object {
-        $URL = "https://bc.dstny.se/api/user/acd-attendant-group/$Domain/$ApiKeyUserId/$Group/$Domain/agents/$($_)?action=logout"
+$DstnyUsers | ForEach-Object {
+    $URL = "https://bc.dstny.se/api/user/acd-attendant-group/$Domain/$ApiKeyUserId/$Group/$Domain/agents/$($_)?action=logout"
+    try {
         Invoke-RestMethod -Method POST -URI $URL -Headers $headers
-        Write-Output $($_ + " utloggad från dsnty")
     }
+    catch {
+        throw "{0} {1}" -f $_.Exception.Response.StatusCode.value__, $_.Exception.Response.ReasonPhrase
+    }
+    Write-Output $($_ + " utloggad från dsnty")
 }
 
-switch ($NextOnCall) {
-    'x.sek@xxx.se' {
-        $DstnyUserId = 'x105@xxxit.se'
-    }
-    'x.ljungstrom@xxx.se' {
-        $DstnyUserId = 'x106@xxxit.se'
-    }
-    'x.sjoblom@xxx.se' {
-        $DstnyUserId = 'x117@xxxit.se'
-    }
-    'x.bilger@xxx.se' {
-        $DstnyUserId = 'x115@xxxit.se'
-    }
-    'kim.torntorp@xxx.se' {
-        $DstnyUserId = 'x121@xxxit.se'
-    }
-    'x.holm@xxx.se' {
-        $DstnyUserId = 'x752@xxxit.se'
-    }
-}
-
-if ($null -eq $NextOnCall) {
-    Write-Output "Inget API anrop"
+if ($OnCallUsers.Length -eq 0) {
+    Write-Output "Ingen har beredskap. Skippar API anrop."
 }
 else {
-    $URL = "https://bc.dstny.se/api/user/acd-attendant-group/$Domain/$ApiKeyUserId/$Group/$Domain/agents/$($DstnyUserId)?action=login"
-    $IR = Invoke-WebRequest -Method POST -Uri $URL -Headers $headers
 
-    Write-Output $("Status code: " + $IR.StatusCode)
-
-    If ($IR.StatusCode -eq "200") {
-        Write-Output $($NextOnCall + " inloggad på dsnty")
-
-    }
-    else {
-        Write-Output $("Status code: " + $($IR.StatusCode) + ". Check the script")
+    $OnCallUsers | ForEach-Object {
+        $DstnyUserId = ($Contacts.contact | Where-Object email -eq $_ ).id
+        $URL = "https://bc.dstny.se/api/user/acd-attendant-group/$Domain/$ApiKeyUserId/$Group/$Domain/agents/$($DstnyUserId)?action=login"
+        try {
+            Invoke-RestMethod -Method POST -Uri $URL -Headers $headers
+        }
+        catch {
+            throw "{0} {1}" -f $_.Exception.Response.StatusCode.value__, $_.Exception.Response.ReasonPhrase
+        }
+        Write-Output $($_ + " inloggad på dsnty")
     }
 }
