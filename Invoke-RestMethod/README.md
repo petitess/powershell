@@ -1,3 +1,19 @@
+#### POST
+```pwsh
+$URL = "https://localhost:7200/api/Auth/login"
+$headers = @{
+    #"Authorization" = "Bearer $Token)"
+    "Content-type" = "application/json"
+}
+$Body = ConvertTo-Json @{
+    email    = "x@x.x"
+    password = "12345.abC"
+    
+}
+$I = Invoke-RestMethod -Method POST -URI $URL -Headers $headers -Body $Body
+$I.token
+```
+
 #### GET
 ```pwsh
 $Token = ""
