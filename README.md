@@ -11,3 +11,8 @@ Start-ADSyncSyncCycle -PolicyType Initial
 ```powershell
 Get-ADPrincipalGroupMembership $env:username | select name
 ```
+##### Add admin to user
+```powershell
+net localgroup Administratörer "AzureAD\xxx@xx.se" /add
+net localgroup Administratörer "AzureAD\xxx@xx.se" /delete
+```
