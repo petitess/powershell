@@ -1,0 +1,13 @@
+New-NetRoute `
+-DestinationPrefix "10.0.99.0/24" `
+-InterfaceAlias "B3ITVisma-vnet" `
+-NextHop "0.0.0.0" `
+-RouteMetric 151
+
+Print-NetRoute `
+-DestinationPrefix "10.0.99.0/24" `
+-InterfaceAlias "B3ITVisma-vnet" `
+-NextHop "0.0.0.0" `
+-RouteMetric 151
+
+route print
