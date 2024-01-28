@@ -46,6 +46,42 @@ VALUES
 -TrustServerCertificate
 }
 
+
+$Y = @(
+    [pscustomobject]@{Title = 'Tesla stock rocks'; Content = 'Tesla is undervalued';  StockId = 1}
+    [pscustomobject]@{Title = 'Microsoft is growing'; Content = 'Sales hit all-time high. Test';  StockId = 2}
+    [pscustomobject]@{Title = 'Azure grew 9% in a year'; Content = 'Azure Open AI gets attention';  StockId = 2}
+    [pscustomobject]@{Title = 'Love Tesla'; Content = 'I love tesla stock';  StockId = 1} 
+    [pscustomobject]@{Title = 'Johnson & Johnson to pay $150M'; Content = 'Johnson & Johnson to pay nearly $150M over its role fueling opioid epidemic';  StockId = 11} 
+    [pscustomobject]@{Title = 'Johnson & Johnson to pay $700M'; Content = 'Johnson & Johnson to Pay $700 Million to Settle Baby Powder Probe';  StockId = 11} 
+)
+
+$Y | Where-Object {
+Invoke-Sqlcmd `
+-Query @"
+INSERT INTO Comments
+    (
+    [Title],
+    [Content],
+    [CreatedOn],
+    [StockId]
+    )
+VALUES
+    ( 
+	'$($_.Title)',
+    '$($_.Content)',
+    '$(Get-Date -Format "yyyy-MM-dd HH:mm")',
+    $($_.StockId)
+	)
+"@ `
+-ServerInstance $Server `
+-Database $Database `
+-Username $Username `
+-Password $Password `
+-ConnectionTimeout 15 `
+-TrustServerCertificate
+}
+
 $I = Invoke-Sqlcmd `
 -Query "SELECT TOP (10) * from [$Database].dbo.Stocks ORDER by Id DESC" `
 -ServerInstance $Server `
