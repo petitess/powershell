@@ -15,3 +15,6 @@ CsDNSHostName, `
 @{label="Win version"; Expression = {$_.WindowsProductName +' '+ $_.WindowsVersion}}, `
 BiosName, `
 @{label="WindowsProductId"; Expression = {($_.WindowsProductId).Substring(0,10)}}
+
+Get-AzADGroup | Where-Object DisplayName -Like *-amazing-* | Select-Object @{Name="DisplayName-------------------"; Expression={$_.DisplayName}},Id
+Get-AzADGroup | Where-Object DisplayName -Like *-amazing-* | Select-Object @{Name="Groups"; Expression={"'$($_.DisplayName)':'$($_.Id)'"}}
