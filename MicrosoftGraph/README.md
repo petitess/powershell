@@ -47,3 +47,7 @@ Get-MgIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest | Conver
 
 (Get-Command get-mg*Privileged*group*).Name
 ```
+#### Assign Admin consent to an enterprise app
+```pwsh
+Connect-MgGraph -Scopes "Sites.Read.All" -ClientId "xxx-3eb5-4440-baff-xxx" -TenantId "xxx-b710-439d-b5bd-xxx"
+```
