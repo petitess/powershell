@@ -51,3 +51,39 @@ Get-MgIdentityGovernancePrivilegedAccessGroupEligibilityScheduleRequest | Conver
 ```pwsh
 Connect-MgGraph -Scopes "Sites.Read.All" -ClientId "xxx-3eb5-4440-baff-xxx" -TenantId "xxx-b710-439d-b5bd-xxx"
 ```
+#### Remove both user and admin consent permissions from application
+```pwsh
+Connect-MgGraph -Scopes "User.ReadWrite.All", "Application.ReadWrite.All", "DelegatedPermissionGrant.ReadWrite.All"
+# Get Service Principal using objectId
+$sp = Get-MgServicePrincipal -ServicePrincipalId 48d2bebb-aea1-4139-979c-b5332e18232a
+# Get all delegated permissions for the service principal
+$spOAuth2PermissionsGrants = Get-MgServicePrincipalOauth2PermissionGrant -ServicePrincipalId $sp.Id -All
+# Remove all delegated permissions
+$spOAuth2PermissionsGrants | ForEach-Object {
+    Remove-MgOauth2PermissionGrant -OAuth2PermissionGrantId $_.Id
+}
+```
+#### Remove admin consent permissions from application
+```pwsh
+Connect-MgGraph -Scopes "User.ReadWrite.All", "Application.ReadWrite.All", "DelegatedPermissionGrant.ReadWrite.All"
+# Get Service Principal using objectId
+$sp = Get-MgServicePrincipal -ServicePrincipalId 453d37f9-20e5-4325-bc00-67d1581a0232
+# Get all delegated permissions for the service principal
+$spOAuth2PermissionsGrants = Get-MgServicePrincipalOauth2PermissionGrant -ServicePrincipalId $sp.Id -All
+# Remove only delegated permissions granted with admin consent
+$spOAuth2PermissionsGrants | Where-Object { $_.ConsentType -eq "AllPrincipals" } | ForEach-Object {
+    Remove-MgOauth2PermissionGrant -OAuth2PermissionGrantId $_.Id
+}
+```
+#### Remove user consent permissions from application
+```pwsh
+Connect-MgGraph -Scopes "User.ReadWrite.All", "Application.ReadWrite.All", "DelegatedPermissionGrant.ReadWrite.All"
+# Get Service Principal using objectId
+$sp = Get-MgServicePrincipal -ServicePrincipalId 453d37f9-20e5-4325-bc00-67d1581a0232
+# Get all delegated permissions for the service principal
+$spOAuth2PermissionsGrants = Get-MgServicePrincipalOauth2PermissionGrant -ServicePrincipalId $sp.Id -All
+# Remove only delegated permissions granted with user consent
+$spOAuth2PermissionsGrants | Where-Object { $_.ConsentType -ne "AllPrincipals" } | ForEach-Object {
+    Remove-MgOauth2PermissionGrant -OAuth2PermissionGrantId $_.Id
+}
+```
