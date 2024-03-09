@@ -1,4 +1,4 @@
-# Variables
+## Variables
 $systemMessageColor = "cyan"
 $processMessageColor = "green"
 $errorMessageColor = "red"
