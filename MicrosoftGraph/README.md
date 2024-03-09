@@ -1,3 +1,6 @@
+#### [Microsoft Graph permissions reference](https://learn.microsoft.com/en-us/graph/permissions-reference)
+-------
+
 #### Install the Microsoft Graph PowerShell SDK
 ```pwsh
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
