@@ -2,7 +2,7 @@
 ```pwsh
 $URL = "https://localhost:7200/api/Auth/login"
 $headers = @{
-    #"Authorization" = "Bearer $Token)"
+    "Authorization" = "Bearer $Token"
     "Content-type" = "application/json"
 }
 $Body = ConvertTo-Json @{
@@ -29,7 +29,7 @@ $headers = @{
 $Token = ""
 $URL = "x"
 $headers = @{
-    "Authorization" = "Bearer $Token)"
+    "Authorization" = "Bearer $Token"
     "Content-type"  = "application/json"
 }
 $Body = ConvertTo-Json @{
