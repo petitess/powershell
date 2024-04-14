@@ -95,4 +95,42 @@ $I.value.'odata.id' | ForEach-Object {
     }
     $I = Invoke-RestMethod -Method Delete -URI $URL -Headers $headers #-Body $Body
     $I
+
+    $Token = (Get-AzAccessToken -ResourceUrl 'https://storage.azure.com/').Token
+$URL = "https://stterraform0001.file.core.windows.net/file01/karolsfil.txt"
+$Date = Get-Date (Get-Date).ToUniversalTime() -Format 'R'
+$headers = @{
+    "Authorization"       = "Bearer $Token"
+    "x-ms-date"           = $Date
+    "x-ms-version"        = "2022-11-02"
+    "x-ms-content-length" = 1000000
+    "x-ms-type"           = "file"
+    "x-ms-file-request-intent" = "backup"
+}
+$I = Invoke-RestMethod -Method PUT -URI $URL -Headers $headers
+$I
+
+$Token = (Get-AzAccessToken -ResourceUrl 'https://storage.azure.com/').Token
+$URL = "https://stterraform0001.file.core.windows.net/file01/matrix.jpg"
+$Date = Get-Date (Get-Date).ToUniversalTime() -Format 'R'
+$headers = @{
+    "Authorization"       = "Bearer $Token"
+    "x-ms-date"           = $Date
+    "x-ms-version"        = "2022-11-02"
+    "x-ms-file-request-intent" = "backup"
+}
+$I = Invoke-RestMethod -Method GET -URI $URL -Headers $headers
+$I
+
+$Token = (Get-AzAccessToken -ResourceUrl 'https://storage.azure.com/').Token
+$URL = "https://stterraform0001.file.core.windows.net/file01?restype=directory&comp=list"
+$Date = Get-Date (Get-Date).ToUniversalTime() -Format 'R'
+$headers = @{
+    "Authorization"       = "Bearer $Token"
+    "x-ms-date"           = $Date
+    "x-ms-version"        = "2022-11-02"
+    "x-ms-file-request-intent" = "backup"
+}
+$I = Invoke-RestMethod -Method GET -URI $URL -Headers $headers
+$I
 }
