@@ -17,7 +17,7 @@ $I.token
 
 #### GET
 ```pwsh
-$Token = ""
+$Token = (Get-AzAccessToken).Token
 $URL = ""
 $headers = @{
     "Authorization" = "Bearer $Token"
