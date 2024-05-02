@@ -1,5 +1,6 @@
 #### POST
 ```pwsh
+$Token = az account get-access-token --query accessToken --output tsv
 $URL = "https://localhost:7200/api/Auth/login"
 $headers = @{
     "Authorization" = "Bearer $Token"
