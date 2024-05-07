@@ -61,9 +61,26 @@ Get-AzDnsRecordSet -ZoneName $ZoneName `
 @{label="name"; Expression = {$_.Name}}, `
 @{label="SRVRecords"; Expression = {$_.Records}} | ConvertTo-Json
 
-#TXT
+#TXT version 1
 Get-AzDnsRecordSet -ZoneName $ZoneName `
 -ResourceGroupName $RgZoneName `
 -RecordType TXT | Select-Object `
 @{label="name"; Expression = {$_.Name}}, `
 @{label="TXTRecords"; Expression = {$_.Records}} | ConvertTo-Json
+
+#TXT version 2
+$Token = (Get-AzAccessToken).Token
+$SubId = "x-ed09cf9d9043"
+$RgName = "publicdns"
+$URL = "https://management.azure.com/subscriptions/$SubId/resourceGroups/$RgName/providers/Microsoft.Network/dnsZones/$ZoneName/TXT?api-version=2023-07-01-preview"
+$headers = @{
+    "Authorization" = "Bearer $Token"
+    "Content-type"  = "application/json"
+}
+$TXT = (Invoke-RestMethod -Method GET -URI $URL -Headers $headers).value #| ConvertTo-Json
+
+$TXT | ForEach-Object {
+    $_ | Select-Object `
+    @{label = 'name'; Expression = { $_.name } }, `
+    @{label = 'TXTRecords'; Expression = { $_.properties.TXTRecords } } | ConvertTo-Json
+}
