@@ -1,0 +1,4 @@
+1..100 | ForEach-object {
+fsutil file createnew .\file_$($_).txt 10485760
+write-host $_.name
+}
