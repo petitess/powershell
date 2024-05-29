@@ -22,3 +22,28 @@ $subscriptions | ForEach-Object {
         }
     }
 }
+
+
+$Tenant = Get-AzTenantDeployment
+
+$Tenant | ForEach-Object {
+    Write-Output "TENANT:"
+    Remove-AzTenantDeployment -Name $_.DeploymentName
+    Write-Output "Removed: $($_.DeploymentName)"
+}
+
+$MgmtGrps = @(
+    (Get-AzContext).Tenant.Id
+    "mg-landingzones-01"
+    "mg-platform-01"
+)
+
+$MgmtGrps | ForEach-Object {
+    Write-Output "$(($_).ToUpper()):"
+    $Deployments = Get-AzManagementGroupDeployment -ManagementGroupId $_
+
+    $Deployments | ForEach-Object {
+        Remove-AzManagementGroupDeployment -ManagementGroupId $_.ManagementGroupId -Name $_.DeploymentName
+        Write-Output "Removed: $($_.DeploymentName)"
+    }
+}
