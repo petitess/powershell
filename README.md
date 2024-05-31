@@ -16,3 +16,4 @@ Get-ADPrincipalGroupMembership $env:username | select name
 net localgroup Administratörer "AzureAD\xxx@xx.se" /add
 net localgroup Administratörer "AzureAD\xxx@xx.se" /delete
 ```
+#Comment from github.dev
