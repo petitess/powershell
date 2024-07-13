@@ -134,18 +134,18 @@ $headers = @{
 $I = Invoke-RestMethod -Method GET -URI $URL -Headers $headers
 $I
 }
-//Upload files
+##Upload files
 $Token = (Get-AzAccessToken -ResourceUrl 'https://storage.azure.com/').Token
-$URL = "https://stgithubprod01.blob.core.windows.net/abc/README.md"
+$URL = "https://stabcprod01.blob.core.windows.net/abc/README.md"
 $Date = Get-Date (Get-Date).ToUniversalTime() -Format 'R'
 $Content = Get-Content .\README.md
 $headers = @{
     "Authorization"  = "Bearer $Token"
     "x-ms-date"      = $Date
-    "Content-type"   = "pplication/octet-stream; charset=UTF-8 "
+    "Content-type"   = "application/octet-stream"
     "x-ms-version"   = "2020-04-08"
     "Accept"         = "application/octet-stream;odata=fullmetadata"
-    "x-ms-blob-content-disposition" = "attachment; filename=D:\CODE\my-infra\README.md" 
+    "x-ms-blob-content-disposition" = "attachment" 
     "x-ms-blob-type"= "BlockBlob"  
 }
 
