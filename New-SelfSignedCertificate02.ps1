@@ -1,9 +1,9 @@
 #Variables
 
 $CertLocation = 'C:\temp\VPN'
+$CertPrefix = "X-VPN"
 $Cert = ${CertPrefix}+"Client.pfx"
 $CertName = "$CertLocation$Cert"
-$CertPrefix = "b3VPN"
 
 ##Create a self-signed root certificate
 
