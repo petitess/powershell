@@ -17,7 +17,10 @@ $I.token
 
 #### GET
 ```pwsh
-$Token = (Get-AzAccessToken).Token
+$SecureToken = (Get-AzAccessToken).Token
+$Token = [Runtime.InteropServices.Marshal]::PtrToStringUni(
+    [Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecureToken)
+)
 $URL = ""
 $headers = @{
     "Authorization" = "Bearer $Token"
