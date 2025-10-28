@@ -21,7 +21,7 @@ net localgroup Administratörer "AzureAD\xxx@xx.se" /delete
 - Rename the `.nupkg` file to `.zip`
 - Extract the contents of the zip file to folder `Az.Accounts`.
 - Copy the `Az.Accounts` folder to `C:\Program Files\WindowsPowerShell\Modules\Az.Accounts`
-- Run theses command:
+- Run these command:
 ```powershell
 Get-ChildItem -Path "C:\Program Files\WindowsPowerShell\Modules\Az.Accounts" -Recurse | Unblock-File
 Get-Module -ListAvailable -Name Az.Accounts
