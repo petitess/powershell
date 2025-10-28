@@ -16,4 +16,14 @@ Get-ADPrincipalGroupMembership $env:username | select name
 net localgroup Administratörer "AzureAD\xxx@xx.se" /add
 net localgroup Administratörer "AzureAD\xxx@xx.se" /delete
 ```
-#Comment from github.dev
+##### Install the Az.Accounts PowerShell module manually
+- Download `Az.Accounts`: https://www.powershellgallery.com/packages/Az.Accounts/
+- Rename the `.nupkg` file to `.zip`
+- Extract the contents of the zip file to folder `Az.Accounts`.
+- Copy the `Az.Accounts` folder to `C:\Program Files\WindowsPowerShell\Modules\Az.Accounts`
+- Run theses command:
+```powershell
+Get-ChildItem -Path "C:\Program Files\WindowsPowerShell\Modules\Az.Accounts" -Recurse | Unblock-File
+Get-Module -ListAvailable -Name Az.Accounts
+Import-Module -Name Az.Accounts
+```
