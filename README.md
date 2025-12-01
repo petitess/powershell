@@ -1,7 +1,7 @@
 # powershell
-##### AD connect sync
+##### VD Code
 ```powershell
-Start-ADSyncSyncCycle -PolicyType Initial
+workbench.action.terminal.runSelectedText
 ```
 ##### Get All Groups for the current user is a member of
 ```powershell
