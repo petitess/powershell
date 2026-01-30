@@ -1,25 +1,32 @@
-$devopsOrgName = "xxx"
-$spiname = "sp-infra-dev-01"
-$serviceEndpointId = az devops service-endpoint list --query "[?name=='$spiname'].id" -o tsv
-$projectName = "Infrastruktur"
-$projectId = az devops project show --project $projectName --query "id" --output tsv
-$token = az account get-access-token --query accessToken --output tsv
-$body = ConvertTo-Json -Depth 10 @{
-    type = "azurerm"
-    authorization = @{
-        scheme = "WorkloadIdentityFederation"
-        #scheme = "ServicePrincipal"
-    }
-    serviceEndpointProjectReferences= @(
-        @{
-            description= ""
-            name = $spiname
-            projectReference = @{
-                id= $projectId
-                name = $projectName
-            }
-        }
-    )
+$token = az account get-access-token --query "accessToken" -o tsv
+$devopsOrgName = "Company"
+# WIQL query to get all work items
+$wiql = @"
+{
+  "query": "SELECT [System.Id], [System.Title], [System.State] FROM WorkItems WHERE [System.TeamProject] = @project"
+}
+"@
+
+$uri = "https://dev.azure.com/$devopsOrgName/Almi/_apis/wit/wiql?api-version=7.1"
+
+# Get list of work item IDs
+$response = Invoke-RestMethod -Method POST -Uri $uri -Headers @{
+    Authorization = "Bearer $token"
+    "Content-Type" = "application/json"
+} -Body $wiql
+
+# Extract work item IDs
+$workItemIds = $response.workItems[0..100].id -join ','
+
+# Get full work item details
+$detailsUri = "https://dev.azure.com/$devopsOrgName/_apis/wit/workitems?ids=$($workItemIds)&api-version=7.1"
+$allWorkItems = Invoke-RestMethod -Method GET -Uri $detailsUri -Headers @{
+    Authorization = "Bearer $token"
 }
 
-Invoke-RestMethod  -Method PUT -Uri "https://dev.azure.com/$devopsOrgName/$devopsProjectName/_apis/serviceendpoint/endpoints/${serviceEndpointId}?operation=ConvertAuthenticationScheme&api-version=7.2-preview.4" -Headers @{ Authorization = "Bearer $token"; "Content-Type" = "application/json"} -Body $body
+$allWorkItems.value.fields.'System.State'
+$allWorkItems.value.fields.'System.Id'
+$allWorkItems.value.fields.'System.AssignedTo'
+
+$allWorkItems.value | Where-Object id -eq "2265"  .fields
+($allWorkItems.value | Where-Object id -eq "1116").fields 
