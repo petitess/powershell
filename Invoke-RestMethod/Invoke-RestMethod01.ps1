@@ -1,25 +1,26 @@
 $token = az account get-access-token --query "accessToken" -o tsv
-#Columns/HEader must have unique names
-Import-Csv "C:\tools\file.csv" `
-    -Delimiter ',' -Encoding utf8
+$devopsOrgName = 'DevOpsabcd'
+$DevopsProjectName = 'abcd.se'
 
-#The amount of columns must match the amount of columns in the CSV file
-$csvData = Import-Csv "C:\tools\Jfile.csv" `
+$csvData = Import-Csv "C:\tools\Jira - Tieto Tech Consulting.csv" `
     -Delimiter ',' -Encoding utf8 `
     -Header 'Summary', 'Issue key', 'Issue Id', 'Issue Type', 'Status', 'Project key', 'Project name', 'Project type', 'Project lead', 'Project lead id', `
-    'Project description', 'Project url', 'Priority', 'Resolution', 'Assignee', 'Assignee Id', 'Reporter', 'Reporter Id'
-# $csvData | ConvertTo-Json | Out-File "C:\tools\file.json"
+    'Project description', 'Project url', 'Priority', 'Resolution', 'Assignee', 'Assignee Id', 'Reporter', 'Reporter Id', `
+    'Creator' , 'Creator Id' , 'Created' , 'Updated' , 'Last Viewed' , 'Resolved' , 'Due date' , 'Labels' , 'Description' , 'Environment' , 'Watchers' , 'Status Category' , 'Status Category Changed'
+# $csvData | ConvertTo-Json | Out-File "C:\tools\Jira - Tieto Tech Consulting.json"
 $csvData[0] #Match Columns
 $csvData[1] #First Ite m
-$csvData[1..$csvData.Count] #Skip first item
+$csvData[1..$csvData.Count].Count #Skip first item
 $csvData.Count
+
 $csvData.'Issue Type'
 $csvData.'Status Category'
 $csvData.'Reporter'
 
-$devopsOrgName = "Company"
-$DevopsProjectName = "Project"
+$csvData[3].'Issue Type'
+$csvData[9].'Summary'
 
+$Count = 0
 $csvData[1..10] | ForEach-Object {
 
     switch ($_.'Issue Type') {
@@ -37,26 +38,34 @@ $csvData[1..10] | ForEach-Object {
     }
 
     switch ($_.'Reporter') {
-        'Anna B' { $AssignedTo = 'anna.b@company.se' }
+        'Anna Berglund' { $AssignedTo = 'anna.berglund@abcd.se' }
         Default { $AssignedTo = "" }
     }
 
-    if ($State = "Active") {
-        $AssignedTo = 'anna.b@company.se'
+    if ($State -eq "Active") {
+        $AssignedTo = 'anna.berglund@abcd.se'
     }
-
-
+  
+    Write-Output $State
+    Write-Output $AssignedTo
     Write-Output $_.Summary
     Write-Output $_."Status Category"
     Write-Output $WorkItemType
+    $IssueKey = $_.'Issue key'
+    $Count++
+    Write-Output $Count
     $Title = $_.Summary
     $Description = $_.Description
-
     $body = @(
         @{
             op    = "add"
             path  = "/fields/System.Title"
-            value = $Title
+            value = "[$IssueKey] $Title"
+        },
+        @{
+            op    = "add"
+            path  = "/fields/Microsoft.VSTS.TCM.SystemInfo"
+            value = $Description
         },
         @{
             op    = "add"
@@ -67,6 +76,21 @@ $csvData[1..10] | ForEach-Object {
             op    = "add"
             path  = "/fields/System.AssignedTo"
             value = $AssignedTo
+        },
+        @{
+            op    = "add"
+            path  = "/multilineFieldsFormat/System.Description"
+            value = "Markdown"
+        },
+        @{
+            op    = "add"
+            path  = "/multilineFieldsFormat/Microsoft.VSTS.TCM.SystemInfo"
+            value = "Markdown"
+        },
+        @{
+            op    = "add"
+            path  = "/fields/System.Tags"
+            value = "$IssueKey; $Count"
         }
 
     ) | ConvertTo-Json -Depth 10 -AsArray
@@ -88,13 +112,10 @@ $csvData[1..10] | ForEach-Object {
         ) | ConvertTo-Json -Depth 10 -AsArray
 
         $uri = "https://dev.azure.com/$devopsOrgName/$DevopsProjectName/_apis/wit/workitems/$($NewItem.id)?api-version=7.1"
-        $NewItem = Invoke-RestMethod -Method PATCH -Uri $uri -Headers @{
+        $UpdateItemState = Invoke-RestMethod -Method PATCH -Uri $uri -Headers @{
             Authorization  = "Bearer $token"
             "Content-Type" = "application/json-patch+json"
         } -Body $body
-        Write-Output "Closed: $($NewItem.fields.'System.Title')"
+        Write-Output "Closed: $($UpdateItemState.fields.'System.Title')"
     }
 }
-
-
-
