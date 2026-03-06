@@ -27,3 +27,7 @@ Get-ChildItem -Path "C:\Program Files\WindowsPowerShell\Modules\Az.Accounts" -Re
 Get-Module -ListAvailable -Name Az.Accounts
 Import-Module -Name Az.Accounts
 ```
+##### PowerShell execution policy using Local Group Policy Editor
+```
+Computer Configuration → Administrative Templates → Windows Components → Windows PowerShell → Turn on Script Execution
+```
