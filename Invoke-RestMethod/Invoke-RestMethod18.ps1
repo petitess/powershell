@@ -1,15 +1,16 @@
-Disconnect-AzAccount
-Connect-AzAccount
-Set-AzContext "sub-infra-dev-01"
-
 ###GET
-$SubscriptionId = (Get-AzSubscription -SubscriptionName "sub-infra-dev-01" | Where-Object {$_.State -eq "Enabled"} ).Id
-$Location = "westeurope"
-$ApimName = "apim-infra-apim-dev-we-01"
-$ApiVersion = "2021-08-01"
+$SubscriptionId = "abc"
+$Location = "swedencentral"
+$ApimName = "apim-dev-almi-01"
+$RgName = "rg-apim-dev-01"
+$ApiVersion = "2024-05-01"
+$Token = az account get-access-token --query accessToken -o tsv
+###Remove the resource
+$URL = "https://management.azure.com/subscriptions/$SubscriptionId/resourceGroups/$RgName/providers/Microsoft.ApiManagement/service/$($ApimName)?api-version=$ApiVersion"
+###Purge a soft-deleted instance
 $URL = "https://management.azure.com/subscriptions/$SubscriptionId/providers/Microsoft.ApiManagement/locations/$Location/deletedservices/$($ApimName)?api-version=$ApiVersion"
 $headers = @{
-    "Authorization" = "Bearer $((Get-AzAccessToken).Token)"
+    "Authorization" = "Bearer $Token"
     "Content-type"  = "application/json"
 }
 
