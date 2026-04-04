@@ -29,5 +29,5 @@ Import-Module -Name Az.Accounts
 ```
 ##### PowerShell execution policy using Local Group Policy Editor
 ```
-Computer Configuration → Administrative Templates → Windows Components → Windows PowerShell → Turn on Script Execution
+gpedit.msc > Computer Configuration → Administrative Templates → Windows Components → Windows PowerShell → Turn on Script Execution
 ```
